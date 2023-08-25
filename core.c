@@ -1,46 +1,44 @@
 #include "monty.h"
-bus_t bus = {NULL, NULL, NULL, 0};
+
 /**
-* core - monty code interpreter
-* @argc: number of arguments
-* @argv: monty file location
-* Return: 0 on success
+* core - execute the monty code and check if the opcode is valid
+* @stack: head linked list - stack and queue
+* @count: line_counter and number to push
+* @file_is_r: pointer to monty file to close
+* @content_in_f: line content to free
+* Return: no return and
 */
-int core(int argc, char *argv[])
+int core(char *content_in_f, my_stack_t **stack, unsigned int count,
+FILE *file_is_r)
 {
-	char *content;
-	FILE *file;
-	size_t size = 0;
-	ssize_t read_line = 1;
-	stack_t *stack = NULL;
-	unsigned int counter = 0;
+	instruction_t op_linked_List[] = {
+				{"pall", _pall_S},
+				{"push", _push_M},
+				{NULL, NULL}
+				};
+	unsigned int i = 0;
+	char *op_cmp;
 
-	if (argc != 2)
+	op_cmp = strtok(content_in_f, " \n\t");
+	if (op_cmp && op_cmp[0] == '#')
+		return (0);
+
+	cat.arg = strtok(NULL, " \n\t");
+	while (op_linked_List[i].opcode && op_cmp)
 	{
-		fprintf(stderr, "USAGE: monty file\n");
-		exit(EXIT_FAILURE);
-	}
-	file = fopen(argv[1], "r");
-	bus.file = file;
-	if (!file)
-	{
-		fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
-		exit(EXIT_FAILURE);
-	}
-	while (read_line > 0)
-	{
-		content = NULL;
-		read_line = getline(&content, &size, file);
-		bus.content = content;
-		counter++;
-		if (read_line > 0)
-		{
-			execute(content, &stack, counter, file);
+		if (strcmp(op_cmp, op_linked_List[i].opcode) == 0)
+		{	op_linked_List[i].f(stack, count);
+			return (0);
 		}
-		free(content);
+		i++;
 	}
-	free_stack(stack);
-	fclose(file);
-return (0);
+	if (op_cmp && op_linked_List[i].opcode == NULL)
+	{
+		fprintf(stderr, "L%d: unknown instruction %s\n", count, op_cmp);
+		fclose(file_is_r);
+		free(content_in_f);
+		errors(*stack);
+		exit(EXIT_FAILURE);
+	}
+	return (1);
 }
-
