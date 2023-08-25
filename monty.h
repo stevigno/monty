@@ -57,5 +57,7 @@ ssize_t getstdin(char **lineptr, int file);
 char  *clean_line(char *content);
 void f_push(stack_t **head, unsigned int number);
 void f_pall(stack_t **head, unsigned int number);
+int core2(char *content, stack_t **head, unsigned int counter, FILE *file);
+
 
 #endif
