@@ -11,7 +11,7 @@ cat_t cat = {NULL, NULL, NULL, 0};
 
 int main(int argc, char *argv[])
 {
-	ssize_t r_line = 1;
+	ssize_t r_line_ = 1;
 	size_t size = 0;
 	unsigned int coun = 0;
 	my_stack_t *stack = NULL;
@@ -31,16 +31,16 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 
-	while (r_line > 0)
+	while (r_line_ > 0)
 	{
 		content_in_f = NULL;
-		r_line = getline(&content_in_f, &size, file_is_r);
+		r_line_ = getline(&content_in_f, &size, file_is_r);
 
 		cat.content = content_in_f;
 		coun++;
-		if (r_line > 0)
+		if (r_line_ > 0)
 		{
-			core(content_in_f, &stack, coun, file_is_r);
+			exe(content_in_f, &stack, coun, file_is_r);
 		}
 		free(content_in_f);
 	}
