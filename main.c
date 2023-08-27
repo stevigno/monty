@@ -15,6 +15,7 @@
 int main(int argc, char *argv[])
 {
 	FILE *file;
+
 	if (argc != 2)
 	{
 		fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
